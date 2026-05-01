@@ -1,13 +1,11 @@
 const express = require("express");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-
 const app = express();
 
 const path = require("path");
 app.use(express.static(path.join(__dirname, "route")));
 
-// middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
@@ -20,13 +18,10 @@ app.use(
   })
 );
 
-// home route
 app.get("/", (req, res) => {
   res.send("Welcome to Student Exam Portal");
 });
 
-
-//login route
 app.post("/login", (req, res) => {
   const { username, role } = req.body;
 
@@ -39,8 +34,6 @@ app.post("/login", (req, res) => {
   res.send(`Logged in as ${username} (${role})`);
 });
 
-
-//dashboard route
 app.get("/dashboard", (req, res) => {
   if (!req.session.user) {
     return res.send("Please login first");
@@ -51,9 +44,6 @@ app.get("/dashboard", (req, res) => {
   res.send(`Welcome ${username}, you are logged in as ${role}`);
 });
 
-
-
-//admin route
 app.get("/admin", (req, res) => {
   if (!req.session.user) {
     return res.send("Please login first");
@@ -66,9 +56,6 @@ app.get("/admin", (req, res) => {
   res.send("Welcome to admin Page");
 });
 
-
-
-// logout route
 app.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.clearCookie("role");
@@ -76,7 +63,6 @@ app.get("/logout", (req, res) => {
   });
 });
 
-// server start
 app.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
